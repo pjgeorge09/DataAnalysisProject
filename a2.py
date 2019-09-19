@@ -18,10 +18,15 @@ def printHT(toPrint):
 def getColAve(object1):
     counter = 0
     runningSum = 0
+    # For Each Column (i) in the Dataframe (object1) do stuff
     for i in object1:
+        # For Each Value in Column Above that does not equal '?'   do stuff
         if (i != '?'):
+            # Make the value a float
             i = float(i)
+            # Increment counter 
             counter += 1
+            #Add to sum
             runningSum = runningSum + i
     toReturn = (runningSum / counter)
     toReturn = round(toReturn,5)

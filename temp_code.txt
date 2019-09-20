@@ -1,0 +1,30 @@
+'''while (p < r):
+        #Doing for all rows [0,8795)        
+        aRow = theDF.iloc[p]
+        # For every item in the row
+        for i in aRow:
+            # If there's an element '?' do stuff
+            if (i == '?'):
+                # calculate the shortest euclidian distance
+                a=0'''
+                
+    '''for i in aRow:
+        if (i == '?'):
+            print("?")'''
+    #print(aRow)
+    '''
+    #the whole df not to be manipulated
+    wholeDF = theDF
+    aDF = theDF
+    best = 1000.00
+    # For every column of the dataframe object, parse and check for '?'
+    # If I find '?', calculate Euclidian Distance
+    for i in aDF:
+        # i = the name of the column
+        if (i != 'Class'):
+            for j in aDF[i]:
+                # j = the value in the column
+                if (j == '?'):
+                    print(j)
+        ave = 0
+    '''

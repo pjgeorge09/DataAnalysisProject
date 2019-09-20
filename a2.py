@@ -64,15 +64,17 @@ def replaceWithConditionalAverage(theDF):
 
 def calcEuc(aDataframe):
     dfC = aDataframe
-    dfC["ED"] = ""
+    dfC["ED"] = 1000
+    dfC["Closest Row"] = ""
     r,c = aDataframe.shape
-    bigMat = [[0 for x in range(r)] for y in range(r)]
+    #bigMat = [[0 for x in range(r)] for y in range(r)]
     dfA = aDataframe
     dfA = dfA.drop(columns='Class')
     dfB = aDataframe
     dfB = dfB.drop(columns='Class')
+    #For every x in range r where r = # of rows
     for x in range (0,r):
-        minimum = 1000
+        #For every y in range r, starting ahead of x (0,1) ... (0,9999) ... (1,2)....
         for y in range (x+1,r):
             '''gross row calculations'''
             z=0
@@ -88,18 +90,24 @@ def calcEuc(aDataframe):
                 b = float(b)
                 theSum += ((a-b)*(a-b))
                 z += 1
+                '''Correctly calculating'''
             theNext = ((math.sqrt(theSum))/2)
             theNext = round(theNext,5)
-            if (theNext < minimum):
-                minimum = theNext
-                dfC.at[x, "ED"] = y
-            bigMat[x][y] = theNext
-            bigMat[y][x] = theNext
-            bigMat[x][x] = 0            
-            #print("We are at " + str(x) + " , " + str(y))
+            checkMinimum = dfC.at[x,"ED"]
+            if(theNext < checkMinimum):
+                #print("New minimum at " + str(x) + " , " + str(y) + " for " + str(theNext))
+                dfC.at[x,"ED"] = theNext
+                dfC.at[x,"Closest Row"] = y
+                #print("theNext = " + str(theNext) + " and y = " + str(y))
+                dfC.at[y,"ED"] = theNext
+                dfC.at[y, "Closest Row"] = x
+            #bigMat[x][y] = theNext
+            #bigMat[y][x] = theNext
+            #bigMat[x][x] = 0            
+        print(x)
             
     print("Holy fucking shit it finished")
-    return
+    return dfC
 
 ''''''
 def hotDeck(theDF):
@@ -109,6 +117,7 @@ def hotDeck(theDF):
     toReturnDF = theDF
     return toReturnDF
 start_time = time.time()
+print("--- %s seconds ---" % (start_time))
 '''Read the files into python'''
 df = pd.read_csv('dataset_complete.csv')
 df05 = pd.read_csv('dataset_missing05.csv')
@@ -148,7 +157,7 @@ print("\n------------Hot Deck Imputation-------------\n")
 dfmock05 = pd.read_csv('dataset_missing05.csv')
 ##printHT(dfmock05) #Print for pre-test
 EucDistance05 = calcEuc(dfmock05)
-
+export = EucDistance05.to_csv('V00396834_EUCDISTANCE2', index= None, header=True)
 dfmock05 = hotDeck(dfmock05)
 ##printHT(dfmock05) #Print for post-test
 print("--- %s seconds ---" % (time.time() - start_time))
